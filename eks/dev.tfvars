@@ -42,6 +42,7 @@ addons = [
   },
   {
     name = "kube-proxy"
+    version = "1.34"
   },
   {
     name    = "aws-ebs-csi-driver"
