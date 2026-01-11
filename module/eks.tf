@@ -42,8 +42,8 @@ resource "aws_eks_addon" "kube_proxy" {
   cluster_name  = aws_eks_cluster.eks[0].name
   addon_name    = "kube-proxy"
   addon_version = data.aws_eks_addon_version.kube_proxy.version
-  depends_on = [aws_eks_node_group.ondemand-node]
 }
+
 
 # NodeGroups
 resource "aws_eks_node_group" "ondemand-node" {
