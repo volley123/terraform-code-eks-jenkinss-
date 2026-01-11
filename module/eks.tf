@@ -31,17 +31,15 @@ resource "aws_iam_openid_connect_provider" "eks-oidc" {
   url             = data.tls_certificate.eks-certificate.url
 }
 
+resource "aws_eks_addon" "eks-addons" {
+  for_each = { for idx, addon in var.addons : idx => addon }
+  cluster_name = aws_eks_cluster.eks[0].name
+  addon_name   = each.value.name
+  addon_version = try(each.value.version, null)
 
-data "aws_eks_addon_version" "kube_proxy" {
-  addon_name         = "kube-proxy"
-  kubernetes_version = aws_eks_cluster.eks[0].version
-  most_recent        = true
-}
-
-resource "aws_eks_addon" "kube_proxy" {
-  cluster_name  = aws_eks_cluster.eks[0].name
-  addon_name    = "kube-proxy"
-  addon_version = data.aws_eks_addon_version.kube_proxy.version
+  depends_on = [
+    aws_eks_node_group.ondemand-node,
+  ]
 }
 
 
